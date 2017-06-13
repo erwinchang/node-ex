@@ -69,7 +69,15 @@ $ tree
 * main.handlebars中"{{{body}}}"，會被換成每一個view的HTML
 defaultLayout:'main'，表示套用所有的view
 
+----------
 
+## ex3
+
+```
+npm install --save express
+npm install --save express3-handlebars
+
+```
 
 ### 說明
 
