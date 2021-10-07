@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>e-Board</title>
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="menu">
+        <div>
+          <select id="size">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+        <hr />
+        <div id="member_msg"></div>
+      </div>
+      <div id="content">
+        <canvas id="whiteboard"></canvas>
+      </div>
+      <div class="clear"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
