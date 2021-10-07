@@ -22,12 +22,12 @@ const offer = (socket) => ({room, offer}) => {
 	socket.broadcast.in(room).emit('offer',offer)
 }
 
-const answer = (socket) => ({rootm, answer}) => {
+const answer = (socket) => ({room, answer}) => {
 	console.log('switch answer')
 	socket.broadcast.in(room).emit('answer',answer)
 }
 
-const icecandiate = (socket) => ({rootm, icecandiate}) => {
+const icecandiate = (socket) => ({room, icecandiate}) => {
 	console.log('switch icecandiate')
 	socket.broadcast.in(room).emit('icecandiate',icecandiate)
 }
