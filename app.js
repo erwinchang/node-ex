@@ -2,7 +2,7 @@ const express = require('express')
 const path = require('path')
 const http = require('http')
 const socket = require('socket.io')
-const { isObject } = require('util')
+const events = require('./event')
 const port = process.env.PORT || 3005
 
 const app = express()
@@ -18,5 +18,8 @@ server.listen(port, () => {
 
 const onConnection = (socket) => {
 	console.log('Socket.io init success:', socket.id)
+
+	socket.on('disconnect',events.leaveBoard(socket))
+	socket.on('login', (data) => events.loginBoard(socket)(data))
 }
 io.on('connection',onConnection)
