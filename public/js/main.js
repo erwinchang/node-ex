@@ -8,9 +8,17 @@ $(document).ready(function() {
 	})
 
 	socket.on('msg', function(data) {
-		console.log('data',data)
+		//console.log('data',data)
 		$('#member_msg').append('<div>' + data.msg + '</div>');
 	})
+
+	socket.on('show', function(data) {
+		//console.log('show',data)
+		$('#size').val(data.size)
+		ctx.lineWidth = data.size
+
+		drawOneLine(data.x,data.y,data.new_x,data.new_y)
+	})	
 
 	$(document).on('mousedown', '#whiteboard', function(e){
 		e.preventDefault();
@@ -56,6 +64,15 @@ $(document).ready(function() {
 	ctx.lineWidth = 1
 	var offset, x, y, new_x, new_y;
 
+	function drawOneLine(x, y, new_x, new_y)
+	{ 
+			ctx.beginPath()
+			ctx.moveTo(x, y)
+			ctx.lineTo(new_x, new_y)
+			ctx.closePath()
+			ctx.stroke()
+	}	
+
 	function drawLine(x, y, new_x, new_y)
 	{ 
 			ctx.beginPath()
@@ -63,5 +80,13 @@ $(document).ready(function() {
 			ctx.lineTo(new_x, new_y)
 			ctx.closePath()
 			ctx.stroke()
+
+			var obj = new Object
+			obj.x = x
+			obj.y = y
+			obj.new_x = new_x
+			obj.new_y = new_y
+			obj.size = $('#size').val()
+			socket.emit('draw',obj)
 	}	
 })

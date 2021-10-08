@@ -21,5 +21,6 @@ const onConnection = (socket) => {
 
 	socket.on('disconnect',events.leaveBoard(socket))
 	socket.on('login', (data) => events.loginBoard(socket)(data))
+	socket.on('draw', (data) => events.drawBoard(socket)(data))
 }
 io.on('connection',onConnection)

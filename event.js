@@ -25,8 +25,16 @@ const loginBoard = (socket) => (data) => {
 	socket.broadcast.emit('msg', obj)
 }
 
+const drawBoard = (socket) => (data) => {
+	//console.log('drawBoard:', socket.id,data)
+
+	//To all connected clients except the sender
+	socket.broadcast.emit('show', data);
+}
+
 
 module.exports = {
 	leaveBoard,
-	loginBoard
+	loginBoard,
+	drawBoard
 }
