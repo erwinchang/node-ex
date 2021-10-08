@@ -1,0 +1,33 @@
+* {
+  margin: 0 auto;
+  padding: 0;
+  font-family: "微軟正黑體", "Oswald", sans-serif;
+}
+
+#wrapper {
+  margin: 15px auto;
+  padding: 0;
+  width: 1000px;
+  height: 800px;
+  border: 2px solid;
+}
+
+#menu {
+  float: left;
+  width: 300px;
+  height: 774px;
+  margin: 10px;
+  border: 2px solid;
+}
+
+#content {
+  float: left;
+  width: 652px;
+  height: 774px;
+  margin: 10px;
+  border: 2px solid;
+}
+
+.clear {
+  clear: left;
+}
