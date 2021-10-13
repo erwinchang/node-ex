@@ -1,0 +1,27 @@
+.div_container {
+  position: absolute;
+}
+
+.div_role {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 31.5px;
+  height: 48px;
+  overflow: hidden;
+}
+
+.div_role img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.div_scene {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 1024px;
+  height: 768px;
+  border: #000000 2px solid;
+}
