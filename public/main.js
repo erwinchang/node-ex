@@ -106,6 +106,7 @@ inputField.addEventListener("keyup", () => {
 })
 
 socket.on("new user", function (data) {
+	console.log('new user',data)
   data.map((user) => addToUsersBox(user));
 })
 
