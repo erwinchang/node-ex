@@ -19,8 +19,9 @@ server.listen(port, () => {
 const onConnection = (socket) => {
 	console.log('Socket.io init success:', socket.id)
 	socket.on('send_msg', (data) => events.send_msg(socket)(data))
-	socket.on('check_login', (username) => events.check_login(socket)(username))
+	socket.on('check_login', (data) => events.check_login(socket)(data))
 	socket.on('feedback_other_exist', (data) => events.feedback_other_exist(socket)(data))
 	socket.on('disconnect',events.leaveBoard(socket))
+	socket.on('other_user_position', (data) => events.other_user_position(socket)(data))
 }
 io.on('connection',onConnection)

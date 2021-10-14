@@ -12,20 +12,38 @@ var socket
 $(document).ready(function() {
 	timer = setInterval(setAction, 300)
 
-	const socket = io.connect()
+	socket = io.connect()
 
 	socket.on('connect',function(){
-		socket.emit('check_login',prompt('貴姓大名？'))
+		let username = prompt('貴姓大名？')
+		//let userImgID = getRandRoleImg()
+		let imgid = prompt('選擇人物(1-4)?')	
+
+		if( imgid == '1' || imgid == '2' || imgid == '3' || imgid == '4' ){
+			imgid = '0' + imgid
+		}else{
+			imgid = '01'
+		}
+
+		console.log('connect',{
+			name: username,
+			imgID: imgid			
+		})
+
+		socket.emit('check_login',{
+			name: username,
+			imgID: imgid
+		})
 	})
 
 	socket.on('add_new_user_myself',function(obj){
-		console.log('add_new_user_myself')
+		console.log('1-1 add_new_user_myself',obj)
 		myID = obj.new_user_id
 		myName = obj.new_user_name
 		let html = "<div class='div_container' id='role_" 
 		         + obj.new_user_id + "'><div id='myMsg_" 
 						 + obj.new_user_id + "' style='position: absolute; top: -35px; width: 500px;'></div><div class='div_role' id='myRole_" 
-						 + obj.new_user_id + "'><img src='./images/roles/a" + getRandRoleImg() + ".png' /></div></div>";
+						 + obj.new_user_id + "'><img src='./images/roles/a" + obj.new_user_imgid + ".png' /></div></div>";
 
 		console.log(html)
 
@@ -33,31 +51,48 @@ $(document).ready(function() {
 	})
 
 	socket.on('add_new_user',function(obj){
-		console.log('add_new_user',obj)
+		console.log('1-2 add_new_user',obj)
 
 		let html = "<div class='div_container' id='role_" 
 		         + obj.new_user_id + "'><div id='myMsg_" 
 						 + obj.new_user_id + "' style='position: absolute; top: -35px; width: 500px;'></div><div class='div_role' id='myRole_" 
-						 + obj.new_user_id + "'><img src='./images/roles/a" + getRandRoleImg() + ".jpg' /></div></div>";
-		$('.div_scene').append(html)
-
-		html = "<p>" + obj.new_user_name +"</p>"
+						 + obj.new_user_id + "'><img src='./images/roles/a" + obj.new_user_imgid + ".png' /></div></div>";
 		$('.div_scene').append(html)
 		
+		console.log('1-2-1 feedback_other_exist',{
+			id:myID,
+			name:myName,
+			new_user_id: obj.new_user_id,
+			new_user_imgid: obj.new_user_imgid
+		})
+
 		socket.emit('feedback_other_exist',{
 			id:myID,
 			name:myName,
-			new_user_id: obj.new_user_id
+			new_user_id: obj.new_user_id,
+			new_user_imgid: obj.new_user_imgid
 		})
 	})
 
+	socket.on('feedback_user_position',function(obj){
+		console.log('feedback_user_position',obj)
+
+		$(".div_container[id=role_" + obj.otherID + "]").animate({
+			'left': (obj.left - 35) + 'px',
+			'top': (obj.top - 35) + 'px'
+			},
+			{duration: 2000})	
+	
+		$('#myRole_' + obj.otherID + ' img').css({'top': obj.imgV * - 48 + 'px'})
+	})
+
 	socket.on('feedback_where_I_am',function(obj){
-		console.log('feedback_where_I_am',obj)
+		console.log('2-1 feedback_where_I_am',obj)
 		if( myID == obj.new_user_id){
 			let html = "<div class='div_container' id='role_" 
 			           + obj.id + "'><div id='myMsg_" + obj.id 
 								 + "' style='position: absolute; top: -35px; width: 500px;'></div><div class='div_role' id='myRole_" 
-								 + obj.id + "'><img src='./images/roles/a" + getRandRoleImg() + ".jpg' /></div></div>"; 			
+								 + obj.id + "'><img src='./images/roles/a" + obj.new_user_imgid + ".png' /></div></div>"; 			
 			console.log('feedback_where_I_am')
 			console.log(html)
 			$('.div_scene').append(html)
@@ -115,11 +150,18 @@ $(document).on('click','.div_scene',function(event){
 	old_x = current_x
 	old_y = current_y
 
+	socket.emit('other_user_position',{
+		id:myID,
+		left:current_x,
+		top:current_y,
+		imgV:imgVerticalNum
+	})
+
 	$(".div_container[id=role_" + myID + "]").animate({
 		'left': (current_x - 35) + 'px',
 		'top': (current_y - 35) + 'px'
 		},
-		{duration: 2000})	
+		{duration: 2000})
 
 	$('#myRole_' + myID + ' img').css({'top': imgVerticalNum * - 48 + 'px'})
 })

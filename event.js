@@ -1,34 +1,65 @@
-const check_login = (socket) => (username) => {
-	console.log('check_login:', socket.id)
-
+const check_login = (socket) => (data) => {
 	let numID = Math.random()
 	numID = numID.toString()
 	numID = numID.replace('.','')
 
-	socket.username = username
+	socket.username = data.name
 	socket.userid = numID
+
+	console.log('0-1 check_login',socket.id,data.name,numID)
+	console.log('0-2 add_new_user_myself',{
+		new_user_id: numID,
+		new_user_name:data.name,
+		new_user_imgid:data.imgID
+	})
+	
 
 	socket.emit('add_new_user_myself', {
 		new_user_id: numID,
-		new_user_name:username
+		new_user_name:data.name,
+		new_user_imgid:data.imgID
+	})
+
+	console.log('0-3 add_new_user',{
+		new_user_id: numID,
+		new_user_name: data.name,
+		new_user_imgid:data.imgID
 	})
 
 	socket.broadcast.emit('add_new_user',{
 		new_user_id: numID,
-		new_user_name: username
+		new_user_name: data.name,
+		new_user_imgid:data.imgID
 	})
 }
 
 const feedback_other_exist = (socket) => (data) => {
-	console.log('feedback_other_exist:', socket.id)
-	console.log(data)
+	console.log('1-1 feedback_other_exist:', data)
+	console.log('1-2 feedback_where_I_am',{
+		id: data.id,
+		name: data.name,
+		new_user_id: data.new_user_id,
+		new_user_imgid: data.new_user_imgid
+	})
 
 	socket.broadcast.emit('feedback_where_I_am',{
 		id: data.id,
 		name: data.name,
-		new_user_id: data.new_user_id
+		new_user_id: data.new_user_id,
+		new_user_imgid: data.new_user_imgid
 	})
+}
 
+const other_user_position = (socket) => (data) => {
+	console.log('other_user_position:', socket.id)
+	console.log(data)
+
+	socket.broadcast.emit('feedback_user_position',{
+		otherID: data.id,
+		left:data.left,
+		top:data.top,
+		imgV:data.imgV
+	})
 }
 
 const leaveBoard = (socket) => (data) => {
@@ -106,5 +137,6 @@ module.exports = {
 	check_login,
 	send_msg,
 	feedback_other_exist,
-	leaveBoard
+	leaveBoard,
+	other_user_position
 }
