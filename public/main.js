@@ -98,6 +98,13 @@ messageForm.addEventListener("submit", (e) => {
   inputField.value = ""
 })
 
+inputField.addEventListener("keyup", () => {
+  socket.emit("typing", {
+    isTyping: inputField.value.length > 0,
+    nick: userName,
+  })
+})
+
 socket.on("new user", function (data) {
   data.map((user) => addToUsersBox(user));
 })
@@ -108,4 +115,15 @@ socket.on("user disconnected", function (userName) {
 
 socket.on("chat message", function (data) {
   addNewMessage({ user: data.nick, message: data.message })
+})
+
+socket.on("typing", function (data) {
+  const { isTyping, nick } = data
+
+  if (!isTyping) {
+    fallback.innerHTML = ""
+    return
+  }
+
+  fallback.innerHTML = `<p>${nick} is typing...</p>`
 })
