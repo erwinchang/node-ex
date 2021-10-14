@@ -1,0 +1,12 @@
+{
+  "name": "socket-io-communcation",
+  "version": "1.0.0",
+  "description": "reference: [Socket.io tutorial: Real-time communication in web development](https://tsh.io/blog/socket-io-tutorial-real-time-communication/)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
