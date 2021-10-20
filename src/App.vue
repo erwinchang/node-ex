@@ -10,9 +10,10 @@
     <li v-for='(todo, index) in todos'
         :key='index'>
       <span :class='{done: todo.done}'> {{ todo.content }} </span>
-      <button>Remove</button>
+      <button @click="removeTodo(index)">Remove</button>
     </li>
   </ul>
+  <h4 v-if="todos.length === 0"> Empty list.</h4>
 </template>
 
 <script>
@@ -31,9 +32,22 @@ export default {
     const todosData = JSON.parse(localStorage.getItem('todos')) || defaultData
     const todos = ref(todosData)
 
+    function removeTodo (index) {
+      console.log(todos)
+      todos.value.splice(index, 1)
+      saveData()
+    }
+
+    function saveData () {
+      const storageData = JSON.stringify(todos.value)
+      console.log('saveData', storageData)
+      localStorage.setItem('todos', storageData)
+    }
+
     return {
       todos,
-      newTodo
+      newTodo,
+      removeTodo
     }
   }
 }
@@ -128,6 +142,11 @@ body {
           padding: $size1;
         }
       }
+    }
+    h4 {
+      text-align: center;
+      opacity: 0.5;
+      margin: 0;
     }
   }
 }
