@@ -1,6 +1,6 @@
 <template>
   <h1>ToDo App</h1>
-  <form>
+  <form @submit.prevent="addTodo()">
     <label>New ToDo</label>
     <input v-model="newTodo">
     <button>Add ToDo</button>
@@ -9,7 +9,8 @@
   <ul>
     <li v-for='(todo, index) in todos'
         :key='index'>
-      <span :class='{done: todo.done}'> {{ todo.content }} </span>
+      <span :class='{done: todo.done}'
+            @click="doneTodo(todo)"> {{ todo.content }} </span>
       <button @click="removeTodo(index)">Remove</button>
     </li>
   </ul>
@@ -32,22 +33,38 @@ export default {
     const todosData = JSON.parse(localStorage.getItem('todos')) || defaultData
     const todos = ref(todosData)
 
+    function addTodo () {
+      if (newTodo.value) {
+        todos.value.push({
+          done: false,
+          content: newTodo.value
+        })
+        newTodo.value = ''
+      }
+      saveData()
+    }
+
+    function doneTodo (todo) {
+      todo.done = !todo.done
+      saveData()
+    }
+
     function removeTodo (index) {
-      console.log(todos)
       todos.value.splice(index, 1)
       saveData()
     }
 
     function saveData () {
       const storageData = JSON.stringify(todos.value)
-      console.log('saveData', storageData)
       localStorage.setItem('todos', storageData)
     }
 
     return {
       todos,
       newTodo,
-      removeTodo
+      removeTodo,
+      addTodo,
+      doneTodo
     }
   }
 }
@@ -123,6 +140,7 @@ body {
       padding-bottom: $size1;
     }
     ul {
+      padding: 10px;
       li {
         display: flex;
         justify-content: space-between;
